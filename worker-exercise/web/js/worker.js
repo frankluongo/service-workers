@@ -1,15 +1,22 @@
 "use strict";
 
-var curFib = 0;
+var curNum = 0;
 
-// TODO
-self.postMessage('Hello from the web worker');
-self.onMessage = onMessage;
+self.onmessage = onMessage;
 
 // **********************************
 
-function onMessage () {
+function onMessage() {
+  console.log('message sent');
+  self.postMessage({});
+	// getNextFib();
+}
 
+function getNextFib() {
+	var curFib = fib(curNum);
+	self.postMessage({ num: curNum, fib: curFib });
+	curNum++;
+	getNextFib();
 }
 
 function fib(n) {

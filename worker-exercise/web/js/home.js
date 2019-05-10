@@ -2,8 +2,8 @@
 	"use strict";
 
 	var startStopBtn;
-  var fibsList;
-  var worker;
+	var fibsList;
+	var worker;
 
 	document.addEventListener("DOMContentLoaded",ready,false);
 
@@ -35,29 +35,23 @@
 		startStopBtn.innerText = "Stop";
 		fibsList.innerHTML = "";
 
-    // TODO
-    // Add a new Web Worker
-    worker = new Worker('/js/worker.js');
-    worker.addEventListener('message', onMessage);
-  }
-
-  function onMessage (event) {
-    console.log(event.data);
-  }
+		worker = new Worker("/js/worker.js");
+		worker.addEventListener("message",onMessage);
+		worker.postMessage({ start: true });
+	}
 
 	function stopFibs() {
 		startStopBtn.removeEventListener("click",stopFibs,false);
 		startStopBtn.addEventListener("click",startFibs,false);
 
 		startStopBtn.innerText = "Start";
+		worker.terminate();
+		worker = null;
+	}
 
-    // TODO
-
-  }
-
-  function onMessage (event) {
-    console.log(event.data);
-    worker.postMessage('Hello from the client');
-  }
+	function onMessage(evt) {
+    console.log('hi!');
+		// renderFib(evt.data.num,evt.data.fib);
+	}
 
 })();
